@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="001a81e7-1993-4145-b054-f835925d84cf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_dump.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_dump.sql" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,6 +50,13 @@
         <item name="appdb@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="appdb: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="accounts: table" type="dbc44a63:MariaImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="appdb@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="appdb: schema" type="ebfa3cd1:MariaImplModel$Schema" />
         <item name="guides_languages: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
@@ -59,8 +67,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/db_dump.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-column="67" />
+            <state relative-caret-position="156">
+              <caret line="6" column="1781" selection-start-line="6" selection-start-column="1780" selection-end-line="6" selection-end-column="1781" />
             </state>
           </provider>
         </entry>
@@ -69,7 +77,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$langActive</find>
       <find>Step</find>
       <find>prr_id</find>
       <find>&lt;but</find>
@@ -99,6 +106,7 @@
       <find>addC</find>
       <find>`</find>
       <find>images</find>
+      <find>)</find>
     </findStrings>
     <replaceStrings>
       <replace>mur</replace>
@@ -484,12 +492,12 @@
       <workItem from="1557699051849" duration="35354000" />
       <workItem from="1557734443808" duration="194000" />
       <workItem from="1557801698569" duration="1697000" />
-      <workItem from="1557846746957" duration="63438000" />
+      <workItem from="1557846746957" duration="63662000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="552692000" />
+    <option name="totallyTimeSpent" value="552916000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -525,7 +533,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.2196162" />
+      <window_info anchor="right" id="Database" order="3" weight="0.2196162" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -885,8 +893,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db_dump.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="67" />
+        <state relative-caret-position="156">
+          <caret line="6" column="1781" selection-start-line="6" selection-start-column="1780" selection-end-line="6" selection-end-column="1781" />
         </state>
       </provider>
     </entry>
