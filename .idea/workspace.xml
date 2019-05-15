@@ -84,8 +84,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/db_dump.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="592">
-              <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
+            <state relative-caret-position="602">
+              <caret line="39" column="533" selection-start-line="39" selection-start-column="533" selection-end-line="39" selection-end-column="533" />
             </state>
           </provider>
         </entry>
@@ -94,7 +94,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>prr_id</find>
       <find>&lt;but</find>
       <find>error</find>
       <find>guide_admin</find>
@@ -124,6 +123,7 @@
       <find>images</find>
       <find>)</find>
       <find>\</find>
+      <find>'</find>
     </findStrings>
     <replaceStrings>
       <replace>mur</replace>
@@ -438,12 +438,12 @@
       <workItem from="1557699051849" duration="35354000" />
       <workItem from="1557734443808" duration="194000" />
       <workItem from="1557801698569" duration="1697000" />
-      <workItem from="1557846746957" duration="64228000" />
+      <workItem from="1557846746957" duration="64413000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="553482000" />
+    <option name="totallyTimeSpent" value="553667000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -836,8 +836,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db_dump.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
-          <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
+        <state relative-caret-position="602">
+          <caret line="39" column="533" selection-start-line="39" selection-start-column="533" selection-end-line="39" selection-end-column="533" />
         </state>
       </provider>
     </entry>
