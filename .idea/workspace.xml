@@ -59,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/db_dump.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="483">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+            <state>
+              <caret selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -484,12 +484,12 @@
       <workItem from="1557699051849" duration="35354000" />
       <workItem from="1557734443808" duration="194000" />
       <workItem from="1557801698569" duration="1697000" />
-      <workItem from="1557846746957" duration="63213000" />
+      <workItem from="1557846746957" duration="63438000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="552467000" />
+    <option name="totallyTimeSpent" value="552692000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -885,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db_dump.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+        <state>
+          <caret selection-end-column="67" />
         </state>
       </provider>
     </entry>
