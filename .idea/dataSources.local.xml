@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="appdb@localhost" uuid="010228b2-fc58-4ebb-8fec-ceadc1eb5db5">
+      <database-info product="MariaDB" version="10.3.14-MariaDB" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.4.1" dbms="MARIADB" exact-version="10.3.14" exact-driver-version="2.4">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>bil0104</user-name>
+      <introspection-schemas>*:appdb</introspection-schemas>
+    </data-source>
+  </component>
+</project>

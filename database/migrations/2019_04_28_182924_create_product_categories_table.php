@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+class CreateProductCategoriesTable extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('product_categories', function(Blueprint $table)
+		{
+			$table->integer('cey_id')->unsigned();
+			$table->integer('put_id')->unsigned()->index('IS_IN_A_CATEGORY');
+			$table->boolean('pcy_active');
+			$table->primary(['cey_id','put_id']);
+		});
+	}
+
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('product_categories');
+	}
+
+}

@@ -1,0 +1,66 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/fontawesome.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/regular.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/solid.min.css');
+
+// Variables
+@import 'variables';
+// Bootstrap
+@import "../../node_modules/startbootstrap-sb-admin/scss/sb-admin";
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.pagination-wrapper .pagination {
+  justify-content: flex-end;
+}
+
+.guide-img {
+
+  margin: 20px;
+  text-align: center;
+
+  img {
+    max-width: 200px;
+    max-height: 120px;
+  }
+}
+
+.control-panel {
+
+  .item-wrapper {
+    margin-left: 20px;
+    display: block;
+  }
+
+  .item-inner {
+
+    .item {
+      border: 1px solid $gray-400;
+      margin: 4px 0;
+      position: relative;
+
+      > span {
+        display: block;
+        margin-right: 60px;
+        padding: 10px;
+      }
+
+      &.selected {
+        border-color: $primary;
+        background-color: lighten($primary, 45%);
+      }
+
+      .btn {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
