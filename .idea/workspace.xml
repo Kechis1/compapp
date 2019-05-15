@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="001a81e7-1993-4145-b054-f835925d84cf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_dump.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_dump.sql" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,10 +57,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$USER_HOME$/Desktop/škola/Bakalářka/db_dump.sql">
+        <entry file="file://$PROJECT_DIR$/db_dump.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="483">
+              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
             </state>
           </provider>
         </entry>
@@ -97,9 +96,9 @@
       <find>toJson</find>
       <find>lang</find>
       <find>catego</find>
-      <find>images</find>
       <find>addC</find>
       <find>`</find>
+      <find>images</find>
     </findStrings>
     <replaceStrings>
       <replace>mur</replace>
@@ -140,7 +139,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/pages/manufacturers/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/pages/manufacturers/create.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/pages/manufacturers/edit.blade.php" />
@@ -191,6 +189,7 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/GuideController.php" />
         <option value="$USER_HOME$/Desktop/škola/Bakalářka/db_insert.sql" />
         <option value="$USER_HOME$/Desktop/škola/Bakalářka/db_dump.sql" />
+        <option value="$PROJECT_DIR$/db_dump.sql" />
       </list>
     </option>
   </component>
@@ -485,12 +484,12 @@
       <workItem from="1557699051849" duration="35354000" />
       <workItem from="1557734443808" duration="194000" />
       <workItem from="1557801698569" duration="1697000" />
-      <workItem from="1557846746957" duration="62902000" />
+      <workItem from="1557846746957" duration="63213000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="552156000" />
+    <option name="totallyTimeSpent" value="552467000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -505,7 +504,7 @@
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19936034" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.19936034" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -526,23 +525,13 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="Database" order="3" visible="true" weight="0.2196162" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.2196162" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="654">
-          <caret line="132" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="132" />
-          <folding>
-            <element signature="e#40#63#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/lang/cs/alerts.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
@@ -889,8 +878,15 @@
     </entry>
     <entry file="file://$USER_HOME$/Desktop/škola/Bakalářka/db_dump.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="157">
+          <caret line="15" lean-forward="true" selection-end-line="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_dump.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
