@@ -12,13 +12,14 @@ use App\Models\GuideStepChoice;
 use App\Models\GuideStepLanguage;
 use App\Models\Image;
 use App\Models\Language;
+use App\Models\Parameter;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use mysql_xdevapi\Exception;
+use Illuminate\Validation\ValidationException;
 
 class GuideController extends Controller
 {
@@ -103,7 +104,7 @@ class GuideController extends Controller
                 $guides = Guide::where('cey_id', $request->cey_id)->get();
                 foreach ($guides as $guide)
                 {
-                    $langGuide = $guide->languages()->where('lge_id', $langActive)->first();
+                    $langGuide = $guide->languages()->where('guides_languages.lge_id', $langActive)->first();
                     if (isset($langGuide->pivot) && $langGuide->pivot->gle_active)
                     {
                         $gleActive = false;
@@ -123,20 +124,24 @@ class GuideController extends Controller
             $guideLang->save();
 
             $list = $request->input('list', []);
-            $this->recursive($list, $guide->gde_id, true, $langActive, null, null, $request->input('images'));
+            $this->recursive($list, $guide->gde_id, true, $langActive, null, $request->input('images'));
 
             DB::commit();
             return response()->json(NULL, 200);
         }
+        catch (ValidationException $e)
+        {
+            DB::rollBack();
+            return response()->json(["message" => $e->getMessage(), "errors" => $e->errors()], 422);
+        }
         catch (\Exception $e)
         {
             DB::rollBack();
-            print_r($e->getMessage());
-            return response()->json(NULL, 400);
+            return response()->json($e->getMessage(), 400);
         }
     }
 
-    function recursive($array, $gdeId, $gspStart, $lgeId, $gsl, $gsp, $images)
+    function recursive($array, $gdeId, $gspStart, $lgeId, $gsp, $images)
     {
         foreach($array as $value)
         {
@@ -144,6 +149,17 @@ class GuideController extends Controller
             {
                 if (strcmp($value["type"],"S") == 0)
                 {
+                    $request = new Request([
+                        'prr_id' => $value["prr_id"],
+                        'choice' => $value["choice"],
+                        "gss_title" => strlen(trim($value["title"])) == 0 ? null : trim($value["title"])
+                    ]);
+
+                    $this->validate($request, [
+                        'prr_id' => 'required|numeric|exists:parameters',
+                        'choice' => 'required|numeric|between:0,2',
+                        'gss_title' => 'required|string|max:100',
+                    ]);
                     $guidStep = new GuideStep();
                     $guidStep->gde_id = $gdeId;
                     $guidStep->prr_id = $value["prr_id"];
@@ -162,17 +178,40 @@ class GuideController extends Controller
                 {
                     if ($value["step"] !== null)
                     {
+                        $request = new Request([
+                            'step_prr_id' => $value["step"]["prr_id"],
+                            'step_choice' => $value["step"]["choice"]
+                        ]);
+
+                        $this->validate($request, [
+                            'step_prr_id' => 'required|numeric',
+                            'step_choice' => 'required|numeric|between:0,2',
+                        ]);
+
+                        Parameter::findOrfail($value["step"]["prr_id"]);
+
                         $nextStep = new GuideStep();
                         $nextStep->gde_id = $gdeId;
                         $nextStep->prr_id = $value["step"]["prr_id"];
                         $nextStep->gsp_choice = $value["step"]["choice"];
                         $nextStep->gsp_start = false;
                         $nextStep->save();
+                        $guideStepLang = new GuideStepLanguage();
+                        $guideStepLang->gsp_id = $nextStep->gsp_id;
+                        $guideStepLang->lge_id = $lgeId;
+                        $guideStepLang->gss_title = $value["step"]["title"];
+                        $guideStepLang->gss_description = $value["step"]["description"];
+                        $guideStepLang->save();
+                        $gspStart = false;
                     }
                     $gsChoices = new GuideStepChoice();
+
                     $gsChoices->gsp_id = $gsp->gsp_id;
-                    $gsChoices->gse_default = $value["default"];
-                    $gsChoices->next_step = isset($nextStep) ? $nextStep : null;
+                    if ($value["default"])
+                    {
+                        $gsChoices->gse_default = GuideStepChoice::where([['gse_default', true], ['gsp_id', $gsp->gsp_id]])->get()->count() > 0 ? false : true;
+                    }
+                    $gsChoices->next_step = isset($nextStep) ? $nextStep->gsp_id : null;
                     foreach ($images as $image)
                     {
                         if (strcmp($image["id"], $value["id"])==0 && $image["image"] !== null)
@@ -191,16 +230,66 @@ class GuideController extends Controller
                         }
                     }
                     $gsChoices->iae_id = isset($image) && isset($image->iae_id) ? $image->iae_id : null;
-                    $gsChoices->gse_min = $value["min"];
-                    $gsChoices->gse_max = $value["max"];
+                    if ((isset($value["min"]) && is_numeric($value["min"])) || (isset($value["max"]) && is_numeric($value["max"])))
+                    {
+                        $request = new Request([
+                            'min' => $value["min"],
+                            'max' => $value["max"],
+                        ]);
+
+                        $this->validate($request, [
+                            'min' => 'required|numeric|lt:max',
+                            'max' => 'required|numeric|gt:min'
+                        ]);
+                        $gsChoices->gse_min = doubleval($value["min"]);
+                        $gsChoices->gse_max = doubleval($value["max"]);
+                    }
+                    else
+                    {
+                        $gsChoices->gse_min = null;
+                        $gsChoices->gse_max = null;
+                    }
+
                     $gsChoices->save();
+                    $isSetPveId = false;
                     foreach ($value["pve_id"] as $pveId)
                     {
-                        $choiceValues = new ChoiceValue();
-                        $choiceValues->gse_id = $gsChoices->gse_id;
-                        $choiceValues->pve_id = $pveId;
-                        $choiceValues->save();
+                        if ($pveId != 0)
+                        {
+                            $request = new Request([
+                                'pve_id' => $pveId,
+                            ]);
+
+                            $this->validate($request, [
+                                'pve_id' => 'required|numeric|exists:parameter_values',
+                            ]);
+                            $choiceValues = new ChoiceValue();
+                            $choiceValues->gse_id = $gsChoices->gse_id;
+                            $choiceValues->pve_id = $pveId;
+                            $choiceValues->save();
+                            $isSetPveId = true;
+                        }
                     }
+                    if ($gsp->gsp_choice == 2 || (($gsp->gsp_choice >= 0 && $gsp->gsp_choice < 2) && $isSetPveId === false))
+                    {
+                        $request = new Request([
+                            'min' => $value["min"],
+                            'max' => $value["max"],
+                        ]);
+
+                        $this->validate($request, [
+                            'min' => 'required|numeric|lt:max',
+                            'max' => 'required|numeric|gt:min'
+                        ]);
+                    }
+
+                    $request = new Request([
+                        'gce_title' => $value["title"],
+                    ]);
+
+                    $this->validate($request, [
+                        'gce_title' => 'required|string|max:50',
+                    ]);
                     $guideChoiceLang = new GuideChoiceLanguage();
                     $guideChoiceLang->gse_id = $gsChoices->gse_id;
                     $guideChoiceLang->lge_id = $lgeId;
@@ -212,13 +301,14 @@ class GuideController extends Controller
                 }
                 if (isset($value["items"]))
                 {
-                    $this->recursive($value["items"], $gdeId, false, $lgeId, isset($guideStepLang) ? $guideStepLang : null, isset($guidStep) ? $guidStep : null, $images);
+                    $gsp = isset($guidStep) && $guidStep !== null ? $guidStep : (isset($gsp) ? $gsp : null);
+                    $this->recursive($value["items"], $gdeId, false, $lgeId, $gsp, $images);
                 }
                 if (isset($value["step"]) && $value["step"] !== null)
                 {
                     if (isset($value["step"]["items"]))
                     {
-                        $this->recursive($value["step"]["items"], $gdeId, false, $lgeId, isset($guideStepLang) ? $guideStepLang : null, isset($guidStep) ? $guidStep : null, $images);
+                        $this->recursive($value["step"]["items"], $gdeId, false, $lgeId, isset($nextStep) ? $nextStep : null, $images);
                     }
                 }
             }
@@ -269,11 +359,25 @@ class GuideController extends Controller
     {
         try
         {
+            DB::beginTransaction();
+            $steps = GuideStep::where('gde_id', $guide->gde_id)->get();
+
+            foreach ($steps->count() > 0 ? $steps : [] as $step)
+            {
+                $images = Image::whereIn('iae_id', array_column(GuideStepChoice::where('gsp_id', $step->gsp_id)->whereNotNull('iae_id')->get()->toArray(), 'iae_id'))->get();
+                foreach ($images as $image)
+                {
+                    echo $image->iae_path;
+                    Storage::delete('public/'.$image->iae_path.'.'.$image->iae_type);
+                }
+            }
             $guide->delete();
+            DB::commit();
             return back()->with('success', __('alerts.deleted', ['object' => __('alerts.guide'), 'deleted' => __('alerts.successfully_deleted')]));
         }
         catch (\Exception $e)
         {
+            DB::rollBack();
             return back()->with('error', __('alerts.unknown_error'));
         }
     }

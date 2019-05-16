@@ -31,12 +31,14 @@
                                             <td>{{$lang->lge_abbreviation}}</td>
                                             <td>{{$lang->lge_name}}</td>
                                             <td>
-                                                <a href="{{action('LanguageController@edit', $lang)}}" class="d-inline btn btn-sm btn-outline-secondary">{{__('buttons.show')}}</a>
-                                                <form action="{{ action('LanguageController@destroy', $lang) }}" method="post" class="d-inline">
-                                                    @csrf
-                                                    {{ method_field('DELETE') }}
-                                                    <button type="submit" class="btn btn-sm btn-danger">{{__('buttons.delete')}}</button>
-                                                </form>
+                                                @if (!in_array($lang->lge_abbreviation, ['cs', 'en']))
+                                                    <a href="{{action('LanguageController@edit', $lang)}}" class="d-inline btn btn-sm btn-outline-secondary">{{__('buttons.show')}}</a>
+                                                    <form action="{{ action('LanguageController@destroy', $lang) }}" method="post" class="d-inline">
+                                                        @csrf
+                                                        {{ method_field('DELETE') }}
+                                                        <button type="submit" class="btn btn-sm btn-danger">{{__('buttons.delete')}}</button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -50,7 +52,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$langs->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$langs->count() == 0 ? $offset : $offset+1}}-{{$offset+$langs->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

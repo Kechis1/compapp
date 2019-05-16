@@ -34,11 +34,15 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @php
+                                        $catCount = $count;
+                                    @endphp
                                         @foreach($categories as $category)
                                             @php
                                                 $la = $category->languages()->where('cle_active', true);
                                                 $langs = $la->get();
                                             @endphp
+                                            @if ($langs->count() > 0)
                                             <tr>
                                                 <td>
                                                     @foreach($langs as $lang)
@@ -73,6 +77,11 @@
                                                     @endforeach
                                                 </td>
                                             </tr>
+                                            @else
+                                                @php
+                                                    $catCount = $catCount-1;
+                                                @endphp
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -84,7 +93,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$categories->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$categories->count() == 0 ? $offset : $offset+1}}-{{$offset+$categories->count()}} {{__('label.of')}} {{$catCount}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

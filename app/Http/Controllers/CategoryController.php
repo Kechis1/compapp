@@ -184,7 +184,7 @@ class CategoryController extends Controller
         ]);
         try
         {
-            Category::findOrFail($category->iae_id);
+            Category::findOrFail($category->cey_id);
             DB::beginTransaction();
             $category->cey_cey_id = $request->input('cey_cey_id',0) == 0 ? null : $request->input('cey_cey_id');
             if ($request->iae_image !== NULL)
@@ -226,7 +226,15 @@ class CategoryController extends Controller
             $cleUrl = "";
             if ($category->cey_cey_id !== null)
             {
-                $cleUrl = CategoryLanguage::where([['lge_id', $categoryLang->lge_id], ['cey_id', $category->cey_cey_id]])->first()->cle_url.'/';
+                $langUrl = CategoryLanguage::where([['lge_id', $categoryLang->lge_id], ['cey_id', $category->cey_cey_id]])->first();
+                if ($langUrl === null)
+                {
+                    return back()->with('error', __('alerts.parent_category_is_not_set'));
+                }
+                else
+                {
+                    $cleUrl = $langUrl->cle_url . '/';
+                }
             }
             $categoryLang->cle_url = $cleUrl . self::generateUrl($request->input('cle_name'));
             $categoryLang->cle_name = $request->input('cle_name');

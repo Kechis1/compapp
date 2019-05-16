@@ -199,7 +199,6 @@ class ShopController extends Controller
 
     public function categories()
     {
-
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.category');
         $breadCrumb->active = TRUE;

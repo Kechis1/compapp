@@ -104,7 +104,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$params->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$params->count() == 0 ? $offset : $offset+1}}-{{$offset+$params->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

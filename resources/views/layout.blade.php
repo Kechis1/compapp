@@ -36,6 +36,7 @@
                 gle_active: true,
                 gle_name: null,
                 errors: false,
+                errorMessage: false,
                 successMessage: false,
                 loaded: true,
                 parameters: [],
@@ -114,6 +115,7 @@
                         vm.loaded = false;
                         vm.successMessage = false;
                         vm.errors = false;
+                        vm.errorMessage = false;
                         window.axios.post('{{ action('GuideController@store') }}', {
                             lang: this.langActive,
                             list: this.list,
@@ -126,8 +128,12 @@
                             vm.loaded = true;
                             vm.successMessage = true;
                         }).catch(function (error) {
+                            console.log(error);
                             vm.loaded = true;
-                            vm.errors = true;
+                            if (error.response.status === 422) {
+                                vm.errors = error.response.data.errors || {};
+                                vm.errorMessage = error.response.data.message;
+                            }
                         }).finally(function () {
                             vm.loaded = true;
                         });

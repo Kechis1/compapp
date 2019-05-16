@@ -44,12 +44,22 @@
 
                                         <tr>
                                             <td>{{$cey->cey_id}}</td>
-                                            <td>@if($ceyPivot!==null){{$ceyPivot->pivot->cle_name}}@endif</td>
+                                            <td>
+                                                @if($ceyPivot!==null)
+                                                    {{$ceyPivot->pivot->cle_name}}
+                                                @else
+                                                    {{__('label.attribute_not_set')}}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @for($i = count($parents)-1; $i >= 0; $i--)
                                                     {{$parents[$i]}} |
                                                 @endfor
-                                                @if($ceyPivot!==null){{$ceyPivot->pivot->cle_name}}@endif
+                                                @if($ceyPivot!==null)
+                                                    {{$ceyPivot->pivot->cle_name}}
+                                                @else
+                                                    {{__('label.attribute_not_set')}}
+                                                @endif
                                             </td>
                                             <td>
                                                 <a href="{{action('CategoryController@edit', $cey)}}" class="d-inline btn btn-sm btn-outline-secondary">{{__('buttons.show')}}</a>
@@ -71,7 +81,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$ceys->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$ceys->count() == 0 ? $offset : $offset+1}}-{{$offset+$ceys->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

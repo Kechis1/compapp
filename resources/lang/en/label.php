@@ -55,5 +55,6 @@ return [
     'title' => 'Title',
     'default_value' => 'Default value',
     'value' => 'Value',
-    'step' => 'Step'
+    'step' => 'Step',
+    'attribute_not_set' => 'Attribute is not set'
 ];

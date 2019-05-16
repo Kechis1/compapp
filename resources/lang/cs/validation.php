@@ -12,6 +12,7 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
+    'invalid' => 'Zadaná data jsou neplatná',
     'accepted'             => ':attribute musí být přijat.',
     'active_url'           => ':attribute není platnou URL adresou.',
     'after'                => ':attribute musí být datum po :date.',

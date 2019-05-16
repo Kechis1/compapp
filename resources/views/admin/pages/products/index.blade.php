@@ -34,7 +34,13 @@
                                             <td>{{$put->put_id}}</td>
                                             <td>{{$put->put_ean}}</td>
                                             <td>{{$put->manufacturer()->first()->mur_name}}</td>
-                                            <td>@if($putLang!==null) {{$putLang->pivot->ple_name}} @endif</td>
+                                            <td>
+                                                @if($putLang!==null)
+                                                    {{$putLang->pivot->ple_name}}
+                                                @else
+                                                    {{__('label.attribute_not_set')}}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @foreach($put->languages()->where('product_languages.ple_active', true)->get() as $lang)
                                                     <span class="badge badge-success">{{$lang->lge_abbreviation}}</span>
@@ -63,7 +69,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$puts->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$puts->count() == 0 ? $offset : $offset+1}}-{{$offset+$puts->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

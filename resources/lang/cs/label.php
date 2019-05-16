@@ -55,5 +55,6 @@ return [
     'title' => 'Nadpis',
     'default_value' => 'Výchozí hodnota',
     'value' => 'Hodnota',
-    'step' => 'Krok'
+    'step' => 'Krok',
+    'attribute_not_set' => 'Atribut není nastaven'
 ];

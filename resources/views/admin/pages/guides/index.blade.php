@@ -35,7 +35,6 @@
                                             <td>@if($gdePivot!==null){{$gdePivot->pivot->gle_name}}@endif</td>
                                             <td>@if($catPivot!==null){{$catPivot->pivot->cle_name}}@endif</td>
                                             <td>
-                                                <a href="{{action('GuideController@edit', $gde)}}" class="d-inline btn btn-sm btn-outline-secondary">{{__('buttons.show')}}</a>
                                                 <form action="{{ action('GuideController@destroy', $gde) }}" method="post" class="d-inline">
                                                     @csrf
                                                     {{ method_field('DELETE') }}
@@ -54,7 +53,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$gdes->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$gdes->count() == 0 ? $offset : $offset+1}}-{{$offset+$gdes->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

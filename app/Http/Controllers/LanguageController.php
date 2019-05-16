@@ -132,6 +132,10 @@ class LanguageController extends Controller
         ]);
         try
         {
+            if (in_array($language->lge_abbreviation, ['cs', 'en']))
+            {
+                return back()->with('error', __('alerts.cant_update_primary_languages'));
+            }
             $exists = Language::where('lge_abbreviation', $request->input('lge_abbreviation'))->first();
             if (isset($exists->lge_id) && $exists->lge_id != $language->lge_id)
             {
@@ -159,6 +163,10 @@ class LanguageController extends Controller
     {
         try
         {
+            if (Language::count() < 3 || in_array($language->lge_abbreviation, ['cs', 'en']))
+            {
+                return back()->with('error', __('alerts.cant_delete_primary_languages'));
+            }
             $language->delete();
             return back()->with('success', __('alerts.deleted', ['object' => __('alerts.language'), 'deleted' => __('alerts.successfully_deleted')]));
         }

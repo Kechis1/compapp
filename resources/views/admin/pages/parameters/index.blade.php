@@ -31,8 +31,20 @@
                                         @endphp
                                         <tr>
                                             <td>{{$prr->prr_id}}</td>
-                                            <td>@if($prrLang !== null){{$prrLang->pivot->pls_name}}@endif</td>
-                                            <td>@if($prrLang !== null){{$prrLang->pivot->pls_unit}}@endif</td>
+                                            <td>
+                                                @if($prrLang !== null)
+                                                    {{$prrLang->pivot->pls_name}}
+                                                @else
+                                                    {{__('label.attribute_not_set')}}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($prrLang !== null)
+                                                    {{$prrLang->pivot->pls_unit}}
+                                                @else
+                                                    {{__('label.attribute_not_set')}}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <a href="{{action('ParameterController@edit', $prr)}}" class="d-inline btn btn-sm btn-outline-secondary">{{__('buttons.show')}}</a>
                                                 <form action="{{ action('ParameterController@destroy', $prr) }}" method="post" class="d-inline">
@@ -53,7 +65,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <span class="items-count text-muted">{{$offset+1}}-{{$offset+$prrs->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
+                                <span class="items-count text-muted">{{$prrs->count() == 0 ? $offset : $offset+1}}-{{$offset+$prrs->count()}} {{__('label.of')}} {{$count}} {{__('label.entries')}}</span>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 @include('pagination')

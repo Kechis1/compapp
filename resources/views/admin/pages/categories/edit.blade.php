@@ -59,12 +59,21 @@
                                 <div class="form-group">
                                     <label for="parent">{{__('inputs.parent')}}</label>
                                     <select class="form-control" name="cey_cey_id" id="parent">
-                                        @if($cey->cey_cey_id !== null && \App\Models\CategoryLanguage::where([['lge_id',$lang_active],['cey_id', $cey->cey_cey_id]])->first() !== null)
-                                            <option value="{{$cey->cey_cey_id}}" selected>{{\App\Models\CategoryLanguage::where([['lge_id',$lang_active],['cey_id', $cey->cey_cey_id]])->first()->cle_name}}</option>
+                                        @if($cey->cey_cey_id !== null)
+                                            @php
+                                                $parent = \App\Models\CategoryLanguage::where([['lge_id',$lang_active],['cey_id', $cey->cey_cey_id]])->first();
+                                            @endphp
+                                            <option value="{{$cey->cey_cey_id}}" selected>
+                                                @if($parent === null)
+                                                    {{__('label.attribute_not_set')}}
+                                                @else
+                                                    {{$parent->cle_name}}
+                                                @endif
+                                            </option>
                                         @endif
                                         <option value="0">--</option>
                                         @foreach(\App\Models\CategoryLanguage::where('lge_id', $lang_active)->orderBy('cle_name')->get() as $cat)
-                                            @if($cey->cey_cey_id !== null && $cey->cey_cey_id != $cat->cey_id)
+                                            @if($cey->cey_cey_id != $cat->cey_id)
                                                 <option value="{{$cat->cey_id}}">{{$cat->cle_name}}</option>
                                             @endif
                                         @endforeach
@@ -76,6 +85,11 @@
                                         <label class="custom-file-label" for="logo">{{__('alerts.image')}}</label>
                                         <input type="file" name="iae_image" class="custom-file-input" id="logo">
                                     </div>
+                                    @if($cey->image()->first() !== null)
+                                        <img class="form-image" alt="" src="{{ asset('storage/'.$cey->image()->first()->iae_path.'.'.$cey->image()->first()->iae_type) }}">
+                                    @else
+                                        <i class="fas text-secondary fa-2x fa-image"></i>
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
