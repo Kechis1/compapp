@@ -212,6 +212,7 @@
                     if (!files.length)
                         return;
                     this.createImage(files[0]);
+                    e.target.value = null;
                 },
                 createImage(file) {
                     let reader = new FileReader();

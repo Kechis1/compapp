@@ -22,7 +22,6 @@ class RedirectIfAuthenticated
             switch ($guard)
             {
                 case "admin":
-                    echo "gular";
                     return redirect()->action('AdminController@index');
                 break;
                 case "shop":

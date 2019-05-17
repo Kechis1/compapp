@@ -82,9 +82,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" v-if="item.state==0">{{__('buttons.close')}}</button>
-                <button type="button" class="btn btn-secondary" @click="back()" v-if="item.state==1&&(item.start==0||list==1)">{{__('buttons.back')}}</button>
-                <button type="button" class="btn btn-primary" @click="next()" v-if="item.state==1">{{__('buttons.accept')}}</button>
-                <button type="button" class="btn btn-primary" @click="acceptCategory()" v-if="item.state==0">{{__('buttons.accept')}}</button>
+                <button type="button" class="btn btn-secondary" :disabled="loading" @click="back()" v-if="item.state==1&&(item.start==0||list==1)">{{__('buttons.back')}}</button>
+                <button type="button" class="btn btn-primary" :disabled="loading" @click="next()" v-if="item.state==1">{{__('buttons.accept')}}</button>
+                <button type="button" class="btn btn-primary" :disabled="loading" @click="acceptCategory()" v-if="item.state==0">{{__('buttons.accept')}}</button>
             </div>
         </div>
     </div>
@@ -140,6 +140,7 @@
                 }
             },
             next() {
+                this.loading = true;
                 let index = -1;
                 let prrId = this.item.body.prr_id;
                 this.params.forEach(function(x, idx) {
@@ -153,6 +154,7 @@
                             prr_id: this.item.body.prr_id,
                             pve_ids: this.item.body.choices.filter(x => x.gse_id === this.item.choice_model)[0].pve_ids
                         });
+                        this.loading = false;
                     } else if (this.item.body.step_choice == 1) {
                         this.item.body.choices.forEach((value, key) => {
                             index = -1;
@@ -172,6 +174,7 @@
                                 }
                             }
                         });
+                        this.loading = false;
                     } else {
                         this.item.body.choices.forEach((value, key) => {
                             this.$http.get(this.urlValuesByPrrIdAndMinMax+'/'+this.item.body.prr_id+'/'+value.gse_min+'/'+value.gse_max).then(function(response) {
@@ -184,10 +187,13 @@
                                 if (index == -1) {
                                     this.params.push({
                                         prr_id: prrId,
-                                        pve_ids: response.pve_ids
+                                        pve_ids: response.body.pve_ids
                                     });
                                 } else {
-                                    this.params[index].pve_ids = this.params[index].pve_ids.concat(response.pve_ids);
+                                    this.params[index].pve_ids = this.params[index].pve_ids.concat(response.body.pve_ids);
+                                }
+                                if (key == this.item.body.choices.length-1) {
+                                    this.loading = false;
                                 }
                             });
                         });
@@ -195,16 +201,21 @@
                 } else {
                     if (this.item.body.step_choice == 0) {
                         this.params[index].pve_ids = this.params[index].pve_ids.concat(this.item.body.choices.filter(x => x.gse_id === this.item.choice_model)[0].pve_ids);
+                        this.loading = false;
                     } else if (this.item.body.step_choice == 1) {
                         this.item.body.choices.forEach((value, key) => {
                           if (value.model) {
                               this.params[index].pve_ids=this.params[index].pve_ids.concat(value.pve_ids);
                           }
                         });
+                        this.loading=false;
                     } else {
                         this.item.body.choices.forEach((value, key) => {
                             this.$http.get(this.urlValuesByPrrIdAndMinMax+'/'+this.item.body.prr_id+'/'+value.gse_min+'/'+value.gse_max).then(function(response) {
-                                this.params[index].pve_ids=this.params[index].pve_ids.concat(response.pve_ids);
+                                this.params[index].pve_ids=this.params[index].pve_ids.concat(response.body.pve_ids);
+                                if (key == this.item.body.choices.length-1) {
+                                    this.loading = false;
+                                }
                             });
                         });
                     }
@@ -218,13 +229,14 @@
                         this.item = response.data;
                     }
                 });
-                console.log(this.params);
             },
             finishGuide() {
                 let url = "/category/" + this.item.category + "?f:";
-                this.params.forEach((value, key) => {
-                   url += value.prr_id + ":" + value.pve_ids.join() + ";";
-                });
+
+                for (let index = 0; index < this.params.length; index++) {
+                    this.params[index].pve_ids = this.params[index].pve_ids.filter((e, i, arr) => arr.indexOf(e) === i);
+                    url += this.params[index].prr_id + ":" + this.params[index].pve_ids.join() + ";";
+                }
                 window.location = url;
             },
             acceptCategory() {
@@ -234,6 +246,7 @@
                     } else {
                         this.item = response.data;
                     }
+                    this.loading = false;
                 });
             }
         }

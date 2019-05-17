@@ -179,7 +179,7 @@ class ShopController extends Controller
         $count = $manufacturers->count();
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $manufacturers = $manufacturers
             ->offset($offset)
@@ -194,7 +194,7 @@ class ShopController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('shop.pages.manufacturers', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'manufacturers' => $manufacturers]);
+        return view('shop.pages.manufacturers', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'manufacturers' => $manufacturers]);
     }
 
     public function categories()
@@ -209,7 +209,7 @@ class ShopController extends Controller
         $count = $categories->count();
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count);
         }
 
         $categories = $categories
@@ -225,7 +225,7 @@ class ShopController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('shop.pages.categories', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'categories' => $categories]);
+        return view('shop.pages.categories', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'categories' => $categories]);
     }
 
     public function deliveries()
@@ -240,7 +240,7 @@ class ShopController extends Controller
         $count = $deliveries->count();
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count);
         }
         $deliveries = $deliveries
             ->offset($offset)
@@ -255,12 +255,7 @@ class ShopController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('shop.pages.deliveries', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'deliveries' => $deliveries]);
-    }
-
-    private function getPagination($first, $current, $prev, $next, $last)
-    {
-        return [$first, $current, $prev, $next, $last];
+        return view('shop.pages.deliveries', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'deliveries' => $deliveries]);
     }
 
     public function parameters()
@@ -275,7 +270,7 @@ class ShopController extends Controller
         $count = $params->count();
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count);
         }
         $params = $params
             ->offset($offset)
@@ -290,7 +285,7 @@ class ShopController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('shop.pages.parameters', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'params' => $params]);
+        return view('shop.pages.parameters', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'params' => $params]);
     }
 
     public function products()
@@ -305,7 +300,7 @@ class ShopController extends Controller
         $count = $productEnterprises->count();
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $productEnterprises = $productEnterprises
             ->offset($offset)
@@ -320,11 +315,6 @@ class ShopController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('shop.pages.products', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'products' => $productEnterprises]);
-    }
-
-    private function calculatePages($count)
-    {
-        return ceil($count / self::LIMIT);
+        return view('shop.pages.products', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'products' => $productEnterprises]);
     }
 }

@@ -18,11 +18,6 @@ class AuthController extends Controller
         $this->middleware('guest');
     }
 
-    public static function generateBytes(int $length): string
-    {
-        return bin2hex(random_bytes($length));
-    }
-
     public function refreshPassword(Request $request, $actId, $amrCodeRefresh)
     {
         $this->validate($request, [
@@ -58,7 +53,7 @@ class AuthController extends Controller
         try
         {
             $act = Account::where([['act_type', '<>', 'UER'],['act_email', $request->input('act_email')]])->firstOrFail();
-            $act->amr_code_refresh = $this->generateBytes(32);
+            $act->amr_code_refresh = self::generateBytes(32);
             $act->save();
             Mail::to($act->act_email)->send(new AccountForgotPassword($act));
             $request->session()->flash('success', __('alerts.password_refresh_email'));

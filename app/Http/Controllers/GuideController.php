@@ -45,7 +45,7 @@ class GuideController extends Controller
         }
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $gdes = $gdes
             ->offset($offset)
@@ -60,7 +60,7 @@ class GuideController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('admin.pages.guides.index', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'gdes' => $gdes]);
+        return view('admin.pages.guides.index', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'gdes' => $gdes]);
     }
 
     /**
@@ -143,36 +143,39 @@ class GuideController extends Controller
 
     function recursive($array, $gdeId, $gspStart, $lgeId, $gsp, $images)
     {
-        foreach($array as $value)
+        foreach($array as $key => $value)
         {
             if (is_array($value))
             {
                 if (strcmp($value["type"],"S") == 0)
                 {
-                    $request = new Request([
-                        'prr_id' => $value["prr_id"],
-                        'choice' => $value["choice"],
-                        "gss_title" => strlen(trim($value["title"])) == 0 ? null : trim($value["title"])
-                    ]);
+                    if (count($array) == 1 || $key != count($array)-1)
+                    {
+                        $request = new Request([
+                            'prr_id' => $value["prr_id"],
+                            'choice' => $value["choice"],
+                            "gss_title" => strlen(trim($value["title"])) == 0 ? NULL : trim($value["title"])
+                        ]);
 
-                    $this->validate($request, [
-                        'prr_id' => 'required|numeric|exists:parameters',
-                        'choice' => 'required|numeric|between:0,2',
-                        'gss_title' => 'required|string|max:100',
-                    ]);
-                    $guidStep = new GuideStep();
-                    $guidStep->gde_id = $gdeId;
-                    $guidStep->prr_id = $value["prr_id"];
-                    $guidStep->gsp_choice = $value["choice"];
-                    $guidStep->gsp_start = $gspStart;
-                    $guidStep->save();
-                    $guideStepLang = new GuideStepLanguage();
-                    $guideStepLang->gsp_id = $guidStep->gsp_id;
-                    $guideStepLang->lge_id = $lgeId;
-                    $guideStepLang->gss_title = $value["title"];
-                    $guideStepLang->gss_description = $value["description"];
-                    $guideStepLang->save();
-                    $gspStart = false;
+                        $this->validate($request, [
+                            'prr_id' => 'required|numeric|exists:parameters',
+                            'choice' => 'required|numeric|between:0,2',
+                            'gss_title' => 'required|string|max:100',
+                        ]);
+                        $guidStep = new GuideStep();
+                        $guidStep->gde_id = $gdeId;
+                        $guidStep->prr_id = $value["prr_id"];
+                        $guidStep->gsp_choice = $value["choice"];
+                        $guidStep->gsp_start = $gspStart;
+                        $guidStep->save();
+                        $guideStepLang = new GuideStepLanguage();
+                        $guideStepLang->gsp_id = $guidStep->gsp_id;
+                        $guideStepLang->lge_id = $lgeId;
+                        $guideStepLang->gss_title = $value["title"];
+                        $guideStepLang->gss_description = $value["description"];
+                        $guideStepLang->save();
+                        $gspStart = FALSE;
+                    }
                 }
                 else
                 {
@@ -211,14 +214,69 @@ class GuideController extends Controller
                     {
                         $gsChoices->gse_default = GuideStepChoice::where([['gse_default', true], ['gsp_id', $gsp->gsp_id]])->get()->count() > 0 ? false : true;
                     }
-                    $gsChoices->next_step = isset($nextStep) ? $nextStep->gsp_id : null;
+                    else
+                    {
+                        $gsChoices->gse_default = false;
+                    }
+                    if (!isset($nextStep))
+                    {
+                        if (strcmp($array[count($array)-1]["type"], "S") == 0)
+                        {
+                            if ($key == 0)
+                            {
+                                $request = new Request([
+                                    'prr_id' => $array[count($array) - 1]["prr_id"],
+                                    'choice' => $array[count($array) - 1]["choice"],
+                                    "gss_title" => strlen(trim($array[count($array) - 1]["title"])) == 0 ? NULL : trim($array[count($array) - 1]["title"])
+                                ]);
+
+                                $this->validate($request, [
+                                    'prr_id' => 'required|numeric|exists:parameters',
+                                    'choice' => 'required|numeric|between:0,2',
+                                    'gss_title' => 'required|string|max:100',
+                                ]);
+                                $guidStep = new GuideStep();
+                                $guidStep->gde_id = $gdeId;
+                                $guidStep->prr_id = $array[count($array) - 1]["prr_id"];
+                                $guidStep->gsp_choice = $array[count($array) - 1]["choice"];
+                                $guidStep->gsp_start = FALSE;
+                                $guidStep->save();
+                                $guideStepLang = new GuideStepLanguage();
+                                $guideStepLang->gsp_id = $guidStep->gsp_id;
+                                $guideStepLang->lge_id = $lgeId;
+                                $guideStepLang->gss_title = $array[count($array) - 1]["title"];
+                                $guideStepLang->gss_description = $array[count($array) - 1]["description"];
+                                $guideStepLang->save();
+                                $gspStart = FALSE;
+                                $gsChoices->next_step = $guidStep->gsp_id;
+                            }
+                            else
+                            {
+                                $gsChoices->next_step = GuideStep::where([['gde_id', $gdeId],['prr_id', $array[count($array) - 1]["prr_id"]]])->orderBy('gsp_id', 'desc')->first()->gsp_id;
+                            }
+                        }
+                        else
+                        {
+                            $gsChoices->next_step = null;
+                        }
+                    }
+                    else
+                    {
+                        $gsChoices->next_step = $nextStep->gsp_id;
+                    }
+                    $gsChoices->iae_id = null;
                     foreach ($images as $image)
                     {
                         if (strcmp($image["id"], $value["id"])==0 && $image["image"] !== null)
                         {
                             $newImage = preg_replace('/data(.*?)base64/', '', $image["image"]);
                             preg_match('/image\/(.*?);/', $image["image"], $match);
-                            $imageName = time();
+
+                            do
+                            {
+                                $imageName = self::generateBytes(32);
+                            }
+                            while (Image::where('iae_path', $imageName)->exists());
                             $imagePath = $imageName . '.' . $match[1];
                             File::put(public_path(). '/storage/' . $imagePath, base64_decode($newImage));
                             $image = new Image();
@@ -227,9 +285,9 @@ class GuideController extends Controller
                             $image->iae_name = $imageName;
                             $image->iae_size = filesize(public_path().'/storage/'.$imagePath)/1000;
                             $image->save();
+                            $gsChoices->iae_id = $image->iae_id;
                         }
                     }
-                    $gsChoices->iae_id = isset($image) && isset($image->iae_id) ? $image->iae_id : null;
                     if ((isset($value["min"]) && is_numeric($value["min"])) || (isset($value["max"]) && is_numeric($value["max"])))
                     {
                         $request = new Request([
@@ -367,10 +425,12 @@ class GuideController extends Controller
                 $images = Image::whereIn('iae_id', array_column(GuideStepChoice::where('gsp_id', $step->gsp_id)->whereNotNull('iae_id')->get()->toArray(), 'iae_id'))->get();
                 foreach ($images as $image)
                 {
-                    echo $image->iae_path;
                     Storage::delete('public/'.$image->iae_path.'.'.$image->iae_type);
+                    $image->delete();
                 }
             }
+            GuideStepChoice::whereIn('gsp_id', array_column($steps->toArray(), 'gse_id'))->delete();
+            GuideStep::where('gde_id', $guide->gde_id)->delete();
             $guide->delete();
             DB::commit();
             return back()->with('success', __('alerts.deleted', ['object' => __('alerts.guide'), 'deleted' => __('alerts.successfully_deleted')]));
@@ -380,16 +440,6 @@ class GuideController extends Controller
             DB::rollBack();
             return back()->with('error', __('alerts.unknown_error'));
         }
-    }
-
-    private function calculatePages($count)
-    {
-        return ceil($count / self::LIMIT);
-    }
-
-    private function getPagination($first, $current, $prev, $next, $last)
-    {
-        return [$first, $current, $prev, $next, $last];
     }
 
     public function getGuideByPage($page)

@@ -37,7 +37,7 @@ class ParameterController extends Controller
         }
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $prrs = $prrs
             ->offset($offset)
@@ -51,7 +51,7 @@ class ParameterController extends Controller
             $next = $current + 1 < $pages ? $current + 1 : NULL;
             $last = $current == $pages ? NULL : $pages;
         }
-        return view('admin.pages.parameters.index', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'prrs' => $prrs]);
+        return view('admin.pages.parameters.index', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'prrs' => $prrs]);
     }
 
     /**
@@ -89,7 +89,7 @@ class ParameterController extends Controller
             $parameter->save();
             $parameterLang = new ParameterLanguage();
             $parameterLang->prr_id = $parameter->prr_id;
-            $parameterLang->lge_id = $request->input('lang');
+            $parameterLang->lge_id = $request->input('lang', Language::first()->lge_id);
             $parameterLang->pls_name = $request->input('pls_name');
             $parameterLang->pls_unit = $request->input('pls_unit');
             $parameterLang->save();
@@ -105,6 +105,7 @@ class ParameterController extends Controller
                     $parameterValueLang->pve_id = $parameterValue->pve_id;
                     $parameterValueLang->pvs_value = trim($item);
                     $parameterValueLang->pvs_active = true;
+                    $parameterValueLang->save();
                 }
             }
             DB::commit();
@@ -254,15 +255,5 @@ class ParameterController extends Controller
         Parameter::findOrFail($prrId);
         $choices = ParameterValueLanguage::where('lge_id', $langActive)->whereIn('pve_id', array_column(ParameterValue::where('prr_id', $prrId)->get()->toArray(), 'pve_id'))->orderBy('pvs_value')->get();
         return json_encode($choices);
-    }
-
-    private function calculatePages($count)
-    {
-        return ceil($count / self::LIMIT);
-    }
-
-    private function getPagination($first, $current, $prev, $next, $last)
-    {
-        return [$first, $current, $prev, $next, $last];
     }
 }

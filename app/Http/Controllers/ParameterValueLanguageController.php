@@ -76,15 +76,11 @@ class ParameterValueLanguageController extends Controller
 
     public function getValuesByPrrIdAndMinMax($prrId, $min, $max)
     {
-        $pveIds = [];
-        foreach (ParameterValue::where('prr_id', $prrId)->get() as $pveId)
-        {
-            array_push($pveIds, $pveId->pve_id);
-        }
+        $pveIds = array_column(ParameterValue::where('prr_id', $prrId)->get()->toArray(), 'pve_id');
         $pveIds = ParameterValueLanguage::whereIn('pve_id', $pveIds)
             ->where(['pvs_active' => true, 'lge_id' => Language::where('lge_abbreviation', App::getLocale())->first()->lge_id])
-            ->whereBetween('pvs_value', [$min, $max])
+            ->whereBetween('pvs_value', [doubleval($min), doubleval($max)])
             ->get();
-        return json_encode(["pve_ids" => $pveIds]);
+        return json_encode(["pve_ids" => array_column($pveIds->toArray(), 'pve_id')]);
     }
 }

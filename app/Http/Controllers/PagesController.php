@@ -121,7 +121,7 @@ class PagesController extends Controller
         $products = DB::select(sprintf(self::SQL_CATEGORY_SELECT_PRODUCTS, $pricesQuery, $murIdQuery, $availabilityQuery, $paramsQuery, $paramsHavingQuery, $pricesQuery, $murIdQuery, $availabilityQuery, $paramsQuery, $paramsHavingQuery, $order), [App::getLocale(), $cleUrl, App::getLocale(), App::getLocale(), App::getLocale(), App::getLocale(), $cleUrl, App::getLocale(), $offset, self::LIMIT]);
 
         if (count($products) > 0)
-            $pages = $this->calculatePages($products[0]->count);
+            $pages = self::calculatePages($products[0]->count, self::LIMIT);
         else $pages = 0;
 
         preg_match('/(.*?)(category\/)/', Request::fullUrl(), $paramUrlMatch);
@@ -170,7 +170,7 @@ class PagesController extends Controller
         $reviews = DB::select(self::SQL_OFFERS_SELECT_REVIEWS_BY_PUT_ID, [$product->put_id, App::getLocale(), $product->put_id, App::getLocale(), $offsetReviews, self::LIMIT]);
         if (count($reviews) > 0)
         {
-            $pagesReviews = $this->calculatePages($reviews[0]->count);
+            $pagesReviews = self::calculatePages($reviews[0]->count, self::LIMIT);
         }
         else
         {
@@ -178,7 +178,7 @@ class PagesController extends Controller
         }
         if (count($offers) > 0)
         {
-            $pagesOffers = $this->calculatePages($offers[0]->count);
+            $pagesOffers = self::calculatePages($offers[0]->count, self::LIMIT);
         }
         else
         {
@@ -246,7 +246,7 @@ class PagesController extends Controller
         array_push($sort, "sort_relevance");
         if (count($products) > 0)
         {
-            $pages = $this->calculatePages($products[0]->count);
+            $pages = self::calculatePages($products[0]->count, self::LIMIT);
         }
         else
         {
@@ -271,7 +271,7 @@ class PagesController extends Controller
 
         if ($companies->count() > 0)
         {
-            $pages = $this->calculatePages($companies->count());
+            $pages = self::calculatePages($companies->count(), self::LIMIT);
         }
         else
         {
@@ -299,7 +299,7 @@ class PagesController extends Controller
         $reviews = $company->reviews()->where([['ete_act_id', '=', $company->act_id], ['lge_id', '=', $lgeId]]);
         if ($reviews->count() > 0)
         {
-            $pages = $this->calculatePages($reviews->count());
+            $pages = self::calculatePages($reviews->count(), self::LIMIT);
         }
         else
         {
@@ -354,11 +354,6 @@ class PagesController extends Controller
     private function getSortSelected()
     {
         return Input::get('sort', "sort_name");
-    }
-
-    private function calculatePages($count)
-    {
-        return ceil($count / self::LIMIT);
     }
 
     private function getOrder()

@@ -29,7 +29,7 @@ class DeliveryController extends Controller
         }
         if ($count > 0)
         {
-            $pages = $this->calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $dlys = $dlys
             ->offset($offset)
@@ -44,7 +44,7 @@ class DeliveryController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('admin.pages.deliveries.index', ['pagination' => $this->getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'dlys' => $dlys]);
+        return view('admin.pages.deliveries.index', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'dlys' => $dlys]);
     }
 
     /**
@@ -161,15 +161,5 @@ class DeliveryController extends Controller
         {
             return back()->with('error', __('alerts.unknown_error'));
         }
-    }
-
-    private function calculatePages($count)
-    {
-        return ceil($count / self::LIMIT);
-    }
-
-    private function getPagination($first, $current, $prev, $next, $last)
-    {
-        return [$first, $current, $prev, $next, $last];
     }
 }
