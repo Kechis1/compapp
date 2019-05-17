@@ -94,7 +94,7 @@
                                     <nav class="pages">
                                         <ul class="pagination">
                                             @for($i = 1; $i <= $pages_offers; $i++)
-                                                @if($i==Request::input('page_offers', 1))
+                                                @if($i==$page_offers)
                                                     <li class="page-item active"><a class="page-link" href="#">{{ $i }}</a></li>
                                                 @else
                                                     <li class="page-item"><a class="page-link" href="/offers/{{$product->ple_url}}?page_offers={{$i}}">{{ $i }}</a></li>
@@ -167,7 +167,7 @@
                                     <nav class="pages">
                                         <ul class="pagination">
                                             @for($i = 1; $i <= $pages_reviews; $i++)
-                                                @if($i==Request::input('page_reviews', 1))
+                                                @if($i==$page_reviews)
                                                     <li class="page-item active"><a class="page-link" href="#">{{ $i }}</a></li>
                                                 @else
                                                     <li class="page-item"><a class="page-link" href="/offers/{{$product->ple_url}}?page_reviews={{$i}}">{{ $i }}</a></li>

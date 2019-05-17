@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Parameter;
+use App\Models\ParameterValue;
 use App\Models\ProductParameter;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
@@ -88,8 +90,21 @@ class ProductParametersController extends Controller
         {
             if (preg_match('/m:(.*?);/', $key, $match) == 1)
             {
-                $m = implode(',', array_map('intval', explode(',', $match[1])));
-                $m1 = array_map('intval', explode(',', $match[1]));
+                $isM = true;
+                foreach (explode(',', $match[1]) as $man)
+                {
+                    if (strlen($man) == 0 || !is_numeric($man))
+                    {
+                        $m = "";
+                        $isM = false;
+                        break;
+                    }
+                }
+                if ($isM)
+                {
+                    $m = implode(',', array_map('intval', explode(',', $match[1])));
+                    $m1 = array_map('intval', explode(',', $match[1]));
+                }
             }
             if (preg_match('/a:true;/', $key, $match) == 1)
             {
@@ -108,14 +123,26 @@ class ProductParametersController extends Controller
                 $f1 = $f = [];
                 foreach (explode(';', $match[0]) as $item)
                 {
-                    array_push($f, [
-                        "prr_id" => (string)intval($item),
-                        "items" => explode(',', substr($item, strpos($item, ":")+1))
-                    ]);
-                    $f1Count++;
-                    $tmp = explode(',', substr($item, strpos($item, ":")+1));
-                    foreach ($tmp as $t) {
-                        array_push($f1, $t);
+                    if (is_numeric($item[0]) && Parameter::where('prr_id',intval($item))->exists())
+                    {
+                        $explode = explode(',', substr($item, strpos($item, ":") + 1));
+                        array_push($f, [
+                            "prr_id" => (string)intval($item),
+                            "items" => []
+                        ]);
+                        $index = count($f)-1;
+                        foreach ($explode as $exItem)
+                        {
+                            if (is_numeric($exItem) && ParameterValue::where([['prr_id', $item],['pve_id', $exItem]])->exists())
+                            {
+                                array_push($f[$index]["items"], $exItem);
+                                $f1Count++;
+                                foreach ($explode as $t)
+                                {
+                                    array_push($f1, $t);
+                                }
+                            }
+                        }
                     }
                 }
                 $f1 = implode(',', array_map('intval', $f1));
@@ -126,10 +153,18 @@ class ProductParametersController extends Controller
         $availabilityQuery = $a !== null && $a ? "AND pee_availability = 0" : "";
         $paramsQuery = $f1 !== null && strlen($f1) > 0 ? "AND (pve_id IN ({$f1}))" : "";
         $paramsHavingQuery = $f1Count > 0 ? "HAVING count(distinct pve_id) >= {$f1Count}" : "";
-        $pricesQuery = $pn !== null && $px !== null ? "AND pee_price BETWEEN ".intval($pn)." AND ".intval($px) : "";
         $prices = DB::selectOne(sprintf(self::SQL_BY_CLE_URL_SELECT_PRICES, $murIdQuery, $availabilityQuery, $paramsQuery ,$paramsHavingQuery), [App::getLocale(), $cleUrl, App::getLocale()]);
-        $prices->price_min_selected = $pn !== null ? intval($pn) : $prices->price_min;
-        $prices->price_max_selected = $px !== null ? intval($px) : $prices->price_max;
+        $pricesQuery = $pn !== null && $px !== null && is_numeric($pn) && is_numeric($px) && doubleval($pn) >= $prices->price_min && doubleval($px) <= $prices->price_max && doubleval($px) > doubleval($pn) ? "AND pee_price BETWEEN ".doubleval($pn)." AND ".doubleval($px) : "";
+        if (strlen($pricesQuery) > 0)
+        {
+            $prices->price_min_selected = doubleval($pn);
+            $prices->price_max_selected = doubleval($px);
+        }
+        else
+        {
+            $prices->price_min_selected = $prices->price_min;
+            $prices->price_max_selected = $prices->price_max;
+        }
         $params = DB::select(self::SQL_BY_CLE_URL_SELECT_PARAMS, [App::getLocale(), App::getLocale(), $cleUrl]);
         foreach ($params as $key => $param)
         {

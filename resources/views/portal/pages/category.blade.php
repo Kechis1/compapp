@@ -125,14 +125,14 @@
                                 },
                                 methods: {
                                     isLarger () {
-                                        if ((Number(this.items.prices.price_min_selected) > Number(this.items.prices.price_max_selected))
+                                        if (!(isNaN(this.items.prices.price_min_selected) ? !1 : (x = parseFloat(this.items.prices.price_min_selected), (0 | x) === x)) || (Number(this.items.prices.price_min_selected) > Number(this.items.prices.price_max_selected))
                                             || (Number(this.items.prices.price_min_selected) > Number(this.items.prices.price_max))
                                             || (Number(this.items.prices.price_min_selected) < Number(this.items.prices.price_min))){
                                             this.items.prices.price_min_selected = this.items.prices.price_min;
                                         }
                                     },
                                     isSmaller () {
-                                        if ((Number(this.items.prices.price_max_selected) < Number(this.items.prices.price_min_selected))
+                                        if (!(isNaN(this.items.prices.price_max_selected) ? !1 : (x = parseFloat(this.items.prices.price_max_selected), (0 | x) === x)) || (Number(this.items.prices.price_max_selected) < Number(this.items.prices.price_min_selected))
                                             || (Number(this.items.prices.price_max_selected) < Number(this.items.prices.price_min))
                                             || (Number(this.items.prices.price_max_selected) > Number(this.items.prices.price_max))) {
                                             this.items.prices.price_max_selected = this.items.prices.price_max;
@@ -310,7 +310,7 @@
                                 <nav aria-label="Page navigation example" class="pages">
                                     <ul class="pagination">
                                         @for($i = 1; $i <= $pages; $i++)
-                                            @if($i==Request::input('page', 1))
+                                            @if($i==$page)
                                                 <li class="page-item active"><a class="page-link" href="#">{{ $i }}</a></li>
                                             @else
                                                 <li class="page-item" @click="changePage('{{$i}}')"><a class="page-link" href="#">{{ $i }}</a></li>

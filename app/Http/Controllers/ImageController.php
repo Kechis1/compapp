@@ -22,13 +22,13 @@ class ImageController extends Controller
         $breadCrumb->name = __('pages.images');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
-        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $iaes = Image::orderBy('iae_id');
         $count = $iaes->count();
-        if ($offset >= $count)
+        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
         {
-            $offset = 0;
             $page = 1;
         }
         if ($count > 0)
@@ -48,7 +48,7 @@ class ImageController extends Controller
             $last = $current == $pages ? NULL : $pages;
         }
 
-        return view('admin.pages.images.index', ['pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'iaes' => $iaes]);
+        return view('admin.pages.images.index', ['page' => $page, 'pagination' => self::getPagination($first, $current, $prev, $next, $last), "offset" => $offset, 'count' => $count, "limit" => self::LIMIT, 'pages' => $pages, 'breadcrumbs' => [$breadCrumb], 'iaes' => $iaes]);
     }
 
     /**

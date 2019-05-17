@@ -18,13 +18,13 @@ class DeliveryController extends Controller
         $breadCrumb->name = __('pages.deliveries');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
-        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $dlys = Delivery::orderBy('dly_id');
         $count = $dlys->count();
-        if ($offset >= $count)
+        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
         {
-            $offset = 0;
             $page = 1;
         }
         if ($count > 0)

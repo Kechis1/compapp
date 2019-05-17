@@ -173,10 +173,15 @@ class ShopController extends Controller
         $breadCrumb->name = __('pages.manufacturers');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $offset = ($page * self::LIMIT) - self::LIMIT;
         $manufacturers = Manufacturer::orderBy('mur_name');
         $count = $manufacturers->count();
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
+        {
+            $page = 1;
+        }
         if ($count > 0)
         {
             $pages = self::calculatePages($count, self::LIMIT);
@@ -203,13 +208,18 @@ class ShopController extends Controller
         $breadCrumb->name = __('pages.category');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $offset = ($page * self::LIMIT) - self::LIMIT;
         $categories = Category::whereNotIn('cey_id', array_column(Category::whereNotNull('cey_cey_id')->distinct()->get()->toArray(), 'cey_cey_id'))->orderBy('cey_cey_id');
         $count = $categories->count();
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
+        {
+            $page = 1;
+        }
         if ($count > 0)
         {
-            $pages = self::calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
 
         $categories = $categories
@@ -234,13 +244,18 @@ class ShopController extends Controller
         $breadCrumb->name = __('pages.deliveries');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $offset = ($page * self::LIMIT) - self::LIMIT;
         $deliveries = Delivery::orderBy('dly_name');
         $count = $deliveries->count();
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
+        {
+            $page = 1;
+        }
         if ($count > 0)
         {
-            $pages = self::calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $deliveries = $deliveries
             ->offset($offset)
@@ -264,13 +279,18 @@ class ShopController extends Controller
         $breadCrumb->name = __('pages.parameters');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $offset = ($page * self::LIMIT) - self::LIMIT;
         $params = Parameter::orderBy('prr_id');
         $count = $params->count();
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
+        {
+            $page = 1;
+        }
         if ($count > 0)
         {
-            $pages = self::calculatePages($count);
+            $pages = self::calculatePages($count, self::LIMIT);
         }
         $params = $params
             ->offset($offset)
@@ -294,10 +314,15 @@ class ShopController extends Controller
         $breadCrumb->name = __('pages.products');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $offset = ($page * self::LIMIT) - self::LIMIT;
         $productEnterprises = Auth::user()->product_enterprises()->orderBy('pee_url');
         $count = $productEnterprises->count();
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
+        {
+            $page = 1;
+        }
         if ($count > 0)
         {
             $pages = self::calculatePages($count, self::LIMIT);

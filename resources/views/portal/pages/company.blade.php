@@ -96,7 +96,7 @@
                                                 <nav aria-label="Page navigation example" class="pages">
                                                     <ul class="pagination">
                                                         @for($i = 1; $i <= $pages; $i++)
-                                                            @if($i==Request::input('page', 1))
+                                                            @if($i==$page)
                                                                 <li class="page-item active"><a class="page-link" href="#">{{ $i }}</a></li>
                                                             @else
                                                                 <li class="page-item"><a class="page-link" href="/companies/{{$company->act_id}}?page={{$i}}">{{ $i }}</a></li>

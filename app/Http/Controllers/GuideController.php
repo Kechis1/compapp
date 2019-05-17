@@ -34,13 +34,13 @@ class GuideController extends Controller
         $breadCrumb->name = __('pages.guides');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
-        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $gdes = Guide::orderBy('gde_id');
         $count = $gdes->count();
-        if ($offset >= $count)
+        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
         {
-            $offset = 0;
             $page = 1;
         }
         if ($count > 0)

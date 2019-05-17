@@ -20,13 +20,13 @@ class ProductController extends Controller
         $breadCrumb->name = __('pages.products');
         $breadCrumb->active = TRUE;
         $pages = $first = $current = $prev = $next = $last = 0;
-        $page = Input::get('page', 1);
-        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $page = is_numeric(Input::get('page', 1)) ? Input::get('page', 1) : 1;
         $puts = Product::orderBy('put_id');
         $count = $puts->count();
-        if ($offset >= $count)
+        $offset = ($page * self::LIMIT) - self::LIMIT;
+        $offset = $offset > $count || $offset < 0 ? 0 : $offset;
+        if ($offset == 0)
         {
-            $offset = 0;
             $page = 1;
         }
         if ($count > 0)
