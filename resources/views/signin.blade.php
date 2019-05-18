@@ -41,6 +41,11 @@
                                 @enderror
                             </div>
                         </div>
+                        @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ucfirst(session('error'))}}
+                            </div>
+                        @endif
                         <button type="submit" class="btn btn-block btn-primary">{{__('buttons.signin')}}</button>
                     </form>
                     <div class="text-center">

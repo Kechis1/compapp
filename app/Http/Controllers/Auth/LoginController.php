@@ -43,24 +43,12 @@ class LoginController extends Controller
 
     public function showShopLoginForm()
     {
-        return view('signin', ['type' => 'ETE', 'title' => __('pages.signin'), 'page_name' => 'page-signin', 'user_lang' => App::getLocale(), 'languages' => Language::all()]);
+        return view('signin', ['amr_active' => 1, 'type' => 'ETE', 'title' => __('pages.signin'), 'page_name' => 'page-signin', 'user_lang' => App::getLocale(), 'languages' => Language::all()]);
     }
 
     public function shopLogin(Request $request)
     {
-        $this->validate($request, [
-            'act_email'   => 'required|email|string|max:100',
-            'amr_password' => 'required|string|min:6'
-        ]);
-
-        if (Auth::guard('shop')->attempt(['amr_active' => 1, 'act_type' => 'ETE', 'act_email' => $request->act_email, 'password' => $request->amr_password], true))
-        {
-            $act = Account::where('act_email', $request->act_email)->first();
-            $act->guard = 'shop';
-            return redirect()->intended(action('ShopController@index'));
-        }
-        $request->session()->flash('error', __('alerts.login_error'));
-        return back()->withInput($request->only('act_email'));
+        return $this->login($request, 'ETE', 'shop', 'ShopController@index');
     }
 
     public function showAdminLoginForm()
@@ -70,17 +58,22 @@ class LoginController extends Controller
 
     public function adminLogin(Request $request)
     {
+        return $this->login($request, 'AMR', 'admin', 'AdminController@index');
+    }
+
+    private function login(Request $request, string $actType, string $guardName, string $controllerName)
+    {
         $this->validate($request, [
             'act_email'   => 'required|email|string|max:100',
             'amr_password' => 'required|string|min:6'
         ]);
-
-        if (Auth::guard('admin')->attempt(['act_type' => 'AMR', 'act_email' => $request->act_email, 'password' => $request->amr_password], true))
+        if (Auth::guard($guardName)->attempt(['amr_active' => 1, 'act_type' => $actType, 'act_email' => $request->act_email, 'password' => $request->amr_password], true))
         {
             $act = Account::where('act_email', $request->act_email)->first();
-            $act->guard = 'admin';
-            return redirect()->intended(action('AdminController@index'));
+            $act->guard = $guardName;
+            return redirect()->intended(action($controllerName));
         }
-        return back()->withInput($request->only('amr_email'));
+        $request->session()->flash('error', __('alerts.login_error'));
+        return back()->withInput($request->only('act_email'));
     }
 }
