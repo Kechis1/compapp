@@ -15,6 +15,7 @@ class LanguageController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.languages');
         $breadCrumb->active = TRUE;
@@ -53,6 +54,7 @@ class LanguageController extends Controller
      */
     public function create()
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.languages');
@@ -106,6 +108,7 @@ class LanguageController extends Controller
      */
     public function edit(Language $language)
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.languages');

@@ -59,6 +59,7 @@ class ProfileController extends Controller
      */
     public function edit(Account $Account)
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.profile');
         $breadCrumb->active = TRUE;
@@ -97,7 +98,6 @@ class ProfileController extends Controller
                 $account->amr_password = Hash::make($request->input('new_amr_password'));
             }
             $account->amr_first_name = $request->input('amr_first_name');
-            $account->amr_last_name = $request->input('amr_last_name');
             $account->amr_last_name = $request->input('amr_last_name');
             $account->save();
             $request->session()->flash('success', __('alerts.updated', ['object' => __('alerts.account'), 'updated' => __('alerts.successfully_updated')]));

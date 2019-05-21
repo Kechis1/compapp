@@ -40,6 +40,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         return view('admin.pages.dashboard', ['shop_total' => Account::where('act_type', 'ETE')->count(), 'guide_total' => Guide::count(), 'product_total' => Product::count()]);
     }
 

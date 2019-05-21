@@ -14,6 +14,7 @@ class ManufacturerController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.manufacturers');
         $breadCrumb->active = TRUE;
@@ -52,6 +53,7 @@ class ManufacturerController extends Controller
      */
     public function create()
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.manufacturers');
@@ -103,6 +105,7 @@ class ManufacturerController extends Controller
      */
     public function edit(Manufacturer $manufacturer)
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.manufacturers');

@@ -22,6 +22,7 @@ class ParameterController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.parameters');
         $breadCrumb->active = TRUE;
@@ -59,6 +60,7 @@ class ParameterController extends Controller
      */
     public function create()
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.parameters');
@@ -135,6 +137,7 @@ class ParameterController extends Controller
      */
     public function edit(Parameter $parameter)
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.parameters');

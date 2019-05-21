@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Language;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+
 trait Utility
 {
-    public static function calculatePages($count, $limit)
+    public static function calculatePages($count, $limit): int
     {
         return ceil($count / $limit);
     }
 
-    public static function getPagination($first, $current, $prev, $next, $last)
+    public static function getPagination($first, $current, $prev, $next, $last): array
     {
         return [$first, $current, $prev, $next, $last];
+    }
+
+    public static function initLocale(): void
+    {
+        if (Auth::check() && isset(Auth::user()->act_lge_id) && Auth::user()->act_lge_id !== null)
+        {
+            $lang = Language::where('lge_id', Auth::user()->act_lge_id)->first();
+            if ($lang !== null && isset($lang->lge_abbreviation))
+            {
+                Cookie::make('lang', $lang->lge_abbreviation, 60);
+                app()->setLocale($lang->lge_abbreviation);
+            }
+        }
     }
 
     /**

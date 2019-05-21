@@ -12,6 +12,7 @@
                         {{__('pages.products')}}
                     </div>
                     <div class="card-body">
+                        <a href="{{action('ProductController@create')}}" class="mb-4 btn btn-primary">{{__('buttons.add')}}</a>
                         <div class="table-responsive">
                             @if($count>0)
                                 <table class="table table-bordered">
@@ -50,7 +51,8 @@
                                                 @endforeach
                                             </td>
                                             <td>
-                                                 <form action="{{ action('ProductController@statusUpdate', $put) }}" method="post" class="d-inline">
+                                                <a href="{{action('ProductController@edit', $put)}}" class="d-inline btn btn-sm btn-outline-secondary">{{__('buttons.show')}}</a>
+                                                <form action="{{ action('ProductController@statusUpdate', $put) }}" method="post" class="d-inline">
                                                     @csrf
                                                     {{ method_field('PATCH') }}
                                                     <button type="submit" name="statusBtn" value="1" class="btn btn-sm btn-success">{{__('buttons.activate')}}</button>

@@ -25,5 +25,6 @@ return [
     'city' => 'Město',
     'zip' => 'PSČ',
     'description' => 'Popisek',
+    'description_short' => 'Krátký popisek',
     'parent' => 'Nadkategorie'
 ];

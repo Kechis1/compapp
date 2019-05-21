@@ -49,6 +49,7 @@ class ShopController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $feed = FeedHistory::where('act_id', Auth::id())->orderBy('fhy_date', 'desc')->first();
         $products = ProductEnterprise::where('act_id', Auth::id())->get()->count();
         return view('shop.pages.dashboard', ['feed' => $feed, 'products' => $products]);
@@ -69,6 +70,7 @@ class ShopController extends Controller
 
     public function profile()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.profile');
         $breadCrumb->active = TRUE;
@@ -123,11 +125,15 @@ class ShopController extends Controller
             $account->ete_city = $request->input('ete_city');
             if ($request->iae_image !== NULL)
             {
+                $origExt = $request->iae_image->getClientOriginalExtension();
+                $origPath = $request->iae_image->getClientOriginalName();
+                if (!in_array($origExt, ['png', 'jpeg', 'jpg', 'gif']))
+                {
+                    throw new \Exception();
+                }
                 $request->iae_image->store('public');
                 if ($request->file('iae_image')->isValid())
                 {
-                    $origExt = $request->iae_image->getClientOriginalExtension();
-                    $origPath = $request->iae_image->getClientOriginalName();
                     $name = substr_replace($origPath, "", strrpos($origPath, $origExt) - 1, strlen($origExt) + 1);
                     $ext = $request->iae_image->extension();
                     $path = substr_replace($request->iae_image->hashName(), "", strrpos($request->iae_image->hashName(), $ext) - 1, strlen($ext) + 1);
@@ -160,6 +166,7 @@ class ShopController extends Controller
 
     public function feed()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.feed');
         $breadCrumb->active = TRUE;
@@ -169,6 +176,7 @@ class ShopController extends Controller
 
     public function manufacturers()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.manufacturers');
         $breadCrumb->active = TRUE;
@@ -204,6 +212,7 @@ class ShopController extends Controller
 
     public function categories()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.category');
         $breadCrumb->active = TRUE;
@@ -240,6 +249,7 @@ class ShopController extends Controller
 
     public function deliveries()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.deliveries');
         $breadCrumb->active = TRUE;
@@ -275,6 +285,7 @@ class ShopController extends Controller
 
     public function parameters()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.parameters');
         $breadCrumb->active = TRUE;
@@ -310,6 +321,7 @@ class ShopController extends Controller
 
     public function products()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.products');
         $breadCrumb->active = TRUE;

@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
-{ 
+{
     private const LIMIT = 10;
     /**
      *
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.category');
         $breadCrumb->active = TRUE;
@@ -59,6 +60,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.category');
@@ -88,11 +90,15 @@ class CategoryController extends Controller
             $category->cey_cey_id = $request->input('cey_cey_id',0) == 0 ? null : $request->input('cey_cey_id');
             if ($request->iae_image !== NULL)
             {
+                $origExt = $request->iae_image->getClientOriginalExtension();
+                $origPath = $request->iae_image->getClientOriginalName();
+                if (!in_array($origExt, ['png', 'jpeg', 'jpg', 'gif']))
+                {
+                    throw new \Exception();
+                }
                 $request->iae_image->store('public');
                 if ($request->file('iae_image')->isValid())
                 {
-                    $origExt = $request->iae_image->getClientOriginalExtension();
-                    $origPath = $request->iae_image->getClientOriginalName();
                     $name = substr_replace($origPath, "", strrpos($origPath, $origExt) - 1, strlen($origExt) + 1);
                     $ext = $request->iae_image->extension();
                     $path = substr_replace($request->iae_image->hashName(), "", strrpos($request->iae_image->hashName(), $ext) - 1, strlen($ext) + 1);
@@ -158,6 +164,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.category');
@@ -193,11 +200,15 @@ class CategoryController extends Controller
                 {
                     Storage::delete('public/' . $category->image()->first()->iae_path . '.' . $category->image()->first()->iae_type);
                 }
+                $origExt = $request->iae_image->getClientOriginalExtension();
+                $origPath = $request->iae_image->getClientOriginalName();
+                if (!in_array($origExt, ['png', 'jpeg', 'jpg', 'gif']))
+                {
+                    throw new \Exception();
+                }
                 $request->iae_image->store('public');
                 if ($request->file('iae_image')->isValid())
                 {
-                    $origExt = $request->iae_image->getClientOriginalExtension();
-                    $origPath = $request->iae_image->getClientOriginalName();
                     $name = substr_replace($origPath, "", strrpos($origPath, $origExt) - 1, strlen($origExt) + 1);
                     $ext = $request->iae_image->extension();
                     $path = substr_replace($request->iae_image->hashName(), "", strrpos($request->iae_image->hashName(), $ext) - 1, strlen($ext) + 1);

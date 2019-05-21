@@ -124,11 +124,16 @@ class AuthController extends Controller
             $account->save();
             if ($request->iae_image !== NULL)
             {
+                $origExt = $request->iae_image->getClientOriginalExtension();
+                $origPath = $request->iae_image->getClientOriginalName();
+                if (!in_array($origExt, ['png', 'jpeg', 'jpg', 'gif']))
+                {
+                    $request->session()->flash('error', __('alerts.invalid_file_format'));
+                    return redirect()->action('PagesController@shopSignUp');
+                }
                 $request->iae_image->store('public');
                 if ($request->file('iae_image')->isValid())
                 {
-                    $origExt = $request->iae_image->getClientOriginalExtension();
-                    $origPath = $request->iae_image->getClientOriginalName();
                     $name = substr_replace($origPath, "", strrpos($origPath, $origExt) - 1, strlen($origExt) + 1);
                     $ext = $request->iae_image->extension();
                     $path = substr_replace($request->iae_image->hashName(), "", strrpos($request->iae_image->hashName(), $ext) - 1, strlen($ext) + 1);

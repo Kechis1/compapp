@@ -13,6 +13,7 @@ return [
     'created' => ':object :created',
     'updated' => ':object :updated',
     'deleted' => ':object :deleted',
+    'invalid_file_format' => 'Invalid image format',
     'already_created' => ':object :already_created',
     'already_created_msg' => 'was already created',
     'unknown_error' => 'Something happened',

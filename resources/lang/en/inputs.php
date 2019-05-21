@@ -25,5 +25,6 @@ return [
     'city' => 'City',
     'zip' => 'ZIP',
     'description' => 'Description',
+    'description_short' => 'Short description',
     'parent' => 'Parent category'
 ];

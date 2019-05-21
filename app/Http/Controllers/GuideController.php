@@ -30,6 +30,7 @@ class GuideController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.guides');
         $breadCrumb->active = TRUE;
@@ -68,6 +69,7 @@ class GuideController extends Controller
      */
     public function create()
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.guides');
@@ -271,7 +273,10 @@ class GuideController extends Controller
                         {
                             $newImage = preg_replace('/data(.*?)base64/', '', $image["image"]);
                             preg_match('/image\/(.*?);/', $image["image"], $match);
-
+                            if (!in_array($match[1], ['png', 'jpeg', 'jpg', 'gif']))
+                            {
+                                throw new \Exception();
+                            }
                             do
                             {
                                 $imageName = self::generateBytes(32);

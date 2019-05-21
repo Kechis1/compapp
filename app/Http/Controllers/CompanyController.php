@@ -19,6 +19,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.companies');
         $breadCrumb->active = TRUE;
@@ -73,6 +74,7 @@ class CompanyController extends Controller
      */
     public function show(Account $company)
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.companies');

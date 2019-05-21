@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Language;
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class RedirectIfAuthenticated
 {
@@ -21,10 +24,10 @@ class RedirectIfAuthenticated
         {
             switch ($guard)
             {
-                case "admin":
+                case 'admin':
                     return redirect()->action('AdminController@index');
                 break;
-                case "shop":
+                case 'shop':
                     return redirect()->action('ShopController@index');
                 break;
                 default:

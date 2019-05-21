@@ -18,6 +18,7 @@ class ImageController extends Controller
      */
     public function index()
     {
+        self::initLocale();
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.images');
         $breadCrumb->active = TRUE;
@@ -56,6 +57,7 @@ class ImageController extends Controller
      */
     public function create()
     {
+        self::initLocale();
         $breadCrumbs = [];
         $breadCrumb = new \StdClass;
         $breadCrumb->name = __('pages.images');
@@ -83,13 +85,17 @@ class ImageController extends Controller
             {
                 throw new \Exception();
             }
+            $origExt = $request->iae_image->getClientOriginalExtension();
+            $origPath = $request->iae_image->getClientOriginalName();
+            if (!in_array($origExt, ['png', 'jpeg', 'jpg', 'gif']))
+            {
+                throw new \Exception();
+            }
             $request->iae_image->store('public');
             if (!$request->file('iae_image')->isValid())
             {
                 throw new \Exception();
             }
-            $origExt = $request->iae_image->getClientOriginalExtension();
-            $origPath = $request->iae_image->getClientOriginalName();
             $name = substr_replace($origPath, "", strrpos($origPath, $origExt) - 1, strlen($origExt) + 1);
             $ext = $request->iae_image->extension();
             $path = substr_replace($request->iae_image->hashName(), "", strrpos($request->iae_image->hashName(), $ext) - 1, strlen($ext) + 1);

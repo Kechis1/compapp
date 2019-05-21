@@ -12,6 +12,7 @@ return [
     'successfully_deleted' => 'byl odstraněn',
     'created' => ':object :created',
     'updated' => ':object :updated',
+    'invalid_file_format' => 'Chybný formát obrázku',
     'deleted' => ':object :deleted',
     'already_created' => ':object :already_created',
     'already_created_msg' => 'byla již vytvořena',

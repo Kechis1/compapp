@@ -19,7 +19,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $items = Review::all();
+
     }
 
     /**
@@ -112,10 +112,10 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Review  $Review
+     * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function show(Review $Review)
+    public function show(Review $review)
     {
         //
     }
@@ -123,10 +123,10 @@ class ReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Review  $lol
+     * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function edit(Review $Review)
+    public function edit(Review $review)
     {
         //
     }
@@ -135,10 +135,10 @@ class ReviewController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Review  $lol
+     * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lol $lol)
+    public function update(Request $request, Review $review)
     {
         //
     }
@@ -146,10 +146,10 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Review  $lol
+     * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Review $Review)
+    public function destroy(Review $review)
     {
         //
     }
