@@ -116,7 +116,7 @@
                                 <tbody>
                                     @foreach($params as $param)
                                         <tr>
-                                            <th>{{$param->pls_name}}@if($param->pls_unit!==null)[{{$param->pls_unit}}]@endif</th>
+                                            <th>{{$param->pls_name}} @if($param->pls_unit!==null)[{{$param->pls_unit}}]@endif</th>
                                             <td>{{$param->pvs_value}}</td>
                                         </tr>
                                     @endforeach
